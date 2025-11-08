@@ -11,7 +11,7 @@
 const STORAGE_KEY = "personalBlogPosts"; // localStorage key for posts data
 let posts = []; // Array to store all blog posts
 let currentEditId = null; // Track which post is being edited
-let currentView = 'list'; // Track current view: 'list' or 'detail'
+let currentView = "list"; // Track current view: 'list' or 'detail'
 let currentDetailPostId = null; // Track which post is in detail view
 
 // ============================================
@@ -43,11 +43,6 @@ function formatDate(timestamp) {
   return date.toLocaleDateString("en-US", options);
 }
 
-/**
- * Sanitize HTML to prevent XSS attacks
- * @param {string} str - Input string
- * @returns {string} Sanitized string
- */
 function sanitizeHTML(str) {
   const div = document.createElement("div");
   div.textContent = str;
@@ -72,7 +67,6 @@ function savePosts() {
 
 /**
  * Load posts from localStorage
- * @returns {Array} Array of posts
  */
 function loadPosts() {
   try {
@@ -86,9 +80,7 @@ function loadPosts() {
 
 /**
  * Add a new post
- * @param {string} title - Post title
- * @param {string} content - Post content
- * @returns {Object} Created post object
+
  */
 function addPost(title, content) {
   const post = {
@@ -104,11 +96,7 @@ function addPost(title, content) {
 }
 
 /**
- * Update an existing post
- * @param {string} id - Post ID
- * @param {string} title - Updated title
- * @param {string} content - Updated content
- * @returns {boolean} Success status
+
  */
 function updatePost(id, title, content) {
   const postIndex = posts.findIndex((post) => post.id === id);
@@ -126,8 +114,7 @@ function updatePost(id, title, content) {
 
 /**
  * Delete a post
- * @param {string} id - Post ID
- * @returns {boolean} Success status
+
  */
 function deletePost(id) {
   const postIndex = posts.findIndex((post) => post.id === id);
@@ -143,8 +130,7 @@ function deletePost(id) {
 
 /**
  * Get a post by ID
- * @param {string} id - Post ID
- * @returns {Object|null} Post object or null
+
  */
 function getPostById(id) {
   return posts.find((post) => post.id === id) || null;
@@ -286,10 +272,12 @@ function createPostCard(post) {
   const card = document.createElement("article");
   card.className = "post-card";
   card.setAttribute("data-post-id", post.id);
-  
+
   // Check if content is long (more than 200 characters)
   const isLongContent = post.content.length > 200;
-  const contentClass = isLongContent ? "post-content truncated" : "post-content";
+  const contentClass = isLongContent
+    ? "post-content truncated"
+    : "post-content";
 
   card.innerHTML = `
         <div class="post-header">
@@ -298,15 +286,23 @@ function createPostCard(post) {
         </div>
         <div class="${contentClass}">${sanitizeHTML(post.content)}</div>
         <div class="post-actions">
-            ${isLongContent ? `
+            ${
+              isLongContent
+                ? `
                 <button class="btn btn-read-more btn-icon" data-action="view" data-id="${post.id}">
                     Leggi tutto
                 </button>
-            ` : ''}
-            <button class="btn btn-edit btn-icon" data-action="edit" data-id="${post.id}">
+            `
+                : ""
+            }
+            <button class="btn btn-edit btn-icon" data-action="edit" data-id="${
+              post.id
+            }">
                 Edit
             </button>
-            <button class="btn btn-delete btn-icon" data-action="delete" data-id="${post.id}">
+            <button class="btn btn-delete btn-icon" data-action="delete" data-id="${
+              post.id
+            }">
                 Delete
             </button>
         </div>
@@ -332,28 +328,28 @@ function updatePostsCount() {
  * Toggle new post form visibility
  */
 function toggleNewPostForm() {
-    const isCollapsed = newPostSection.classList.contains('collapsed');
-    
-    if (isCollapsed) {
-        // Show form
-        newPostSection.classList.remove('collapsed');
-        btnAddPost.textContent = 'Hide Form';
-        // Focus on title input after animation
-        setTimeout(() => {
-            postTitleInput.focus();
-        }, 300);
-    } else {
-        // Hide form
-        newPostSection.classList.add('collapsed');
-        btnAddPost.textContent = 'New Post';
-        // Clear form
-        postForm.reset();
-        // Clear errors
-        titleError.textContent = '';
-        contentError.textContent = '';
-        postTitleInput.classList.remove('error');
-        postContentInput.classList.remove('error');
-    }
+  const isCollapsed = newPostSection.classList.contains("collapsed");
+
+  if (isCollapsed) {
+    // Show form
+    newPostSection.classList.remove("collapsed");
+    btnAddPost.textContent = "Hide Form";
+    // Focus on title input after animation
+    setTimeout(() => {
+      postTitleInput.focus();
+    }, 300);
+  } else {
+    // Hide form
+    newPostSection.classList.add("collapsed");
+    btnAddPost.textContent = "New Post";
+    // Clear form
+    postForm.reset();
+    // Clear errors
+    titleError.textContent = "";
+    contentError.textContent = "";
+    postTitleInput.classList.remove("error");
+    postContentInput.classList.remove("error");
+  }
 }
 
 // ============================================
@@ -365,22 +361,24 @@ function toggleNewPostForm() {
  * @param {string} postId - ID of post to view
  */
 function showPostDetail(postId) {
-    const post = getPostById(postId);
-    
-    if (!post) {
-        alert('Post not found');
-        return;
-    }
-    
-    currentView = 'detail';
-    currentDetailPostId = postId;
-    
-    // Create detail view HTML
-    postDetail.innerHTML = `
+  const post = getPostById(postId);
+
+  if (!post) {
+    alert("Post not found");
+    return;
+  }
+
+  currentView = "detail";
+  currentDetailPostId = postId;
+
+  // Create detail view HTML
+  postDetail.innerHTML = `
         <div class="post-detail-header">
             <h2 class="post-detail-title">${sanitizeHTML(post.title)}</h2>
             <div class="post-detail-meta">
-                <span class="post-timestamp">${formatDate(post.timestamp)}</span>
+                <span class="post-timestamp">${formatDate(
+                  post.timestamp
+                )}</span>
             </div>
         </div>
         <div class="post-detail-content">${sanitizeHTML(post.content)}</div>
@@ -388,42 +386,46 @@ function showPostDetail(postId) {
             <button class="btn btn-back" data-action="back">
                 Indietro
             </button>
-            <button class="btn btn-edit btn-icon" data-action="edit" data-id="${post.id}">
+            <button class="btn btn-edit btn-icon" data-action="edit" data-id="${
+              post.id
+            }">
                 Edit
             </button>
-            <button class="btn btn-delete btn-icon" data-action="delete" data-id="${post.id}">
+            <button class="btn btn-delete btn-icon" data-action="delete" data-id="${
+              post.id
+            }">
                 Delete
             </button>
         </div>
     `;
-    
-    // Show detail, hide list
-    postDetail.classList.add('active');
-    postsContainer.style.display = 'none';
-    emptyState.style.display = 'none';
-    
-    // Scroll to top
-    postDetail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Show detail, hide list
+  postDetail.classList.add("active");
+  postsContainer.style.display = "none";
+  emptyState.style.display = "none";
+
+  // Scroll to top
+  postDetail.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 /**
  * Hide post detail view and show list
  */
 function hidePostDetail() {
-    currentView = 'list';
-    currentDetailPostId = null;
-    
-    // Hide detail, show list
-    postDetail.classList.remove('active');
-    postsContainer.style.display = 'flex';
-    
-    // Show empty state if no posts
-    if (posts.length === 0) {
-        emptyState.style.display = 'block';
-    }
-    
-    // Scroll to posts section
-    postsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  currentView = "list";
+  currentDetailPostId = null;
+
+  // Hide detail, show list
+  postDetail.classList.remove("active");
+  postsContainer.style.display = "flex";
+
+  // Show empty state if no posts
+  if (posts.length === 0) {
+    emptyState.style.display = "block";
+  }
+
+  // Scroll to posts section
+  postsContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 // ============================================
@@ -509,10 +511,10 @@ function handleNewPost(e) {
 
   // Clear form
   postForm.reset();
-  
+
   // Hide form after submission
-  newPostSection.classList.add('collapsed');
-  btnAddPost.textContent = 'New Post';
+  newPostSection.classList.add("collapsed");
+  btnAddPost.textContent = "New Post";
 
   // Re-render posts
   renderPosts();
@@ -606,7 +608,7 @@ function handleDeletePost(postId) {
 
   if (success) {
     // If we're in detail view of this post, go back to list
-    if (currentView === 'detail' && currentDetailPostId === postId) {
+    if (currentView === "detail" && currentDetailPostId === postId) {
       hidePostDetail();
     }
     renderPosts();

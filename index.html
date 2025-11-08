@@ -28,7 +28,10 @@
     <main class="main-content" id="main-content" role="main">
       <div class="container">
         <!-- New Post Form Section -->
-        <section class="new-post-section collapsed" aria-labelledby="new-post-heading">
+        <section
+          class="new-post-section collapsed"
+          aria-labelledby="new-post-heading"
+        >
           <h2 id="new-post-heading">Create New Post</h2>
           <form
             id="postForm"
@@ -89,21 +92,19 @@
         <section class="posts-section" aria-labelledby="posts-heading">
           <div class="posts-header">
             <h2 id="posts-heading">My Posts</h2>
-            <div style="display: flex; gap: 1rem; align-items: center;">
+            <div style="display: flex; gap: 1rem; align-items: center">
               <span class="posts-count" id="postsCount" aria-live="polite"
                 >0 posts</span
               >
-              <button id="btnAddPost" class="btn btn-add-post">
-                New Post
-              </button>
+              <button id="btnAddPost" class="btn btn-add-post">New Post</button>
             </div>
           </div>
-          
+
           <!-- Post Detail View (Hidden by default) -->
           <div id="postDetail" class="post-detail">
             <!-- Detail content will be inserted here by JavaScript -->
           </div>
-          
+
           <!-- Posts List View -->
           <div
             id="postsContainer"
