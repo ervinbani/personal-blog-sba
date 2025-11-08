@@ -1,13 +1,16 @@
 // Personal Blog Platform - JavaScript
 // Interactive blog with DOM manipulation, event handling, and localStorage
+// Author: Ervin
+// Date: November 8, 2025
+// Per Scholas - JavaScript SBA
 
 // ============================================
 // GLOBAL STATE & CONSTANTS
 // ============================================
 
-const STORAGE_KEY = "personalBlogPosts";
-let posts = [];
-let currentEditId = null;
+const STORAGE_KEY = 'personalBlogPosts'; // localStorage key for posts data
+let posts = []; // Array to store all blog posts
+let currentEditId = null; // Track which post is being edited
 
 // ============================================
 // UTILITY FUNCTIONS
