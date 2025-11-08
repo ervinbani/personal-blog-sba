@@ -201,19 +201,24 @@ function validatePost(
   contentErrorEl.textContent = "";
   titleInput.classList.remove("error");
   contentInput.classList.remove("error");
+  titleInput.setAttribute("aria-invalid", "false");
+  contentInput.setAttribute("aria-invalid", "false");
 
   // Validate title
   if (!title.trim()) {
     titleErrorEl.textContent = "Title is required";
     titleInput.classList.add("error");
+    titleInput.setAttribute("aria-invalid", "true");
     isValid = false;
   } else if (title.trim().length < 3) {
     titleErrorEl.textContent = "Title must be at least 3 characters";
     titleInput.classList.add("error");
+    titleInput.setAttribute("aria-invalid", "true");
     isValid = false;
   } else if (title.trim().length > 100) {
     titleErrorEl.textContent = "Title must be less than 100 characters";
     titleInput.classList.add("error");
+    titleInput.setAttribute("aria-invalid", "true");
     isValid = false;
   }
 
@@ -221,10 +226,12 @@ function validatePost(
   if (!content.trim()) {
     contentErrorEl.textContent = "Content is required";
     contentInput.classList.add("error");
+    contentInput.setAttribute("aria-invalid", "true");
     isValid = false;
   } else if (content.trim().length < 10) {
     contentErrorEl.textContent = "Content must be at least 10 characters";
     contentInput.classList.add("error");
+    contentInput.setAttribute("aria-invalid", "true");
     isValid = false;
   }
 
@@ -334,6 +341,7 @@ function openEditModal(postId) {
     
     // Show modal
     editModal.classList.add('active');
+    editModal.setAttribute('aria-hidden', 'false');
     editPostTitleInput.focus();
 }
 
@@ -342,6 +350,7 @@ function openEditModal(postId) {
  */
 function closeEditModal() {
     editModal.classList.remove('active');
+    editModal.setAttribute('aria-hidden', 'true');
     currentEditId = null;
     editForm.reset();
     
