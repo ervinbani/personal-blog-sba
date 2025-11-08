@@ -49,3 +49,99 @@ function sanitizeHTML(str) {
     return div.innerHTML;
 }
 
+// ============================================
+// LOCALSTORAGE FUNCTIONS
+// ============================================
+
+/**
+ * Save posts array to localStorage
+ */
+function savePosts() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+    } catch (error) {
+        console.error('Error saving to localStorage:', error);
+        alert('Failed to save posts. Please check your browser settings.');
+    }
+}
+
+/**
+ * Load posts from localStorage
+ * @returns {Array} Array of posts
+ */
+function loadPosts() {
+    try {
+        const storedPosts = localStorage.getItem(STORAGE_KEY);
+        return storedPosts ? JSON.parse(storedPosts) : [];
+    } catch (error) {
+        console.error('Error loading from localStorage:', error);
+        return [];
+    }
+}
+
+/**
+ * Add a new post
+ * @param {string} title - Post title
+ * @param {string} content - Post content
+ * @returns {Object} Created post object
+ */
+function addPost(title, content) {
+    const post = {
+        id: generateId(),
+        title: title.trim(),
+        content: content.trim(),
+        timestamp: Date.now()
+    };
+    
+    posts.unshift(post); // Add to beginning of array
+    savePosts();
+    return post;
+}
+
+/**
+ * Update an existing post
+ * @param {string} id - Post ID
+ * @param {string} title - Updated title
+ * @param {string} content - Updated content
+ * @returns {boolean} Success status
+ */
+function updatePost(id, title, content) {
+    const postIndex = posts.findIndex(post => post.id === id);
+    
+    if (postIndex !== -1) {
+        posts[postIndex].title = title.trim();
+        posts[postIndex].content = content.trim();
+        posts[postIndex].timestamp = Date.now(); // Update timestamp
+        savePosts();
+        return true;
+    }
+    
+    return false;
+}
+
+/**
+ * Delete a post
+ * @param {string} id - Post ID
+ * @returns {boolean} Success status
+ */
+function deletePost(id) {
+    const postIndex = posts.findIndex(post => post.id === id);
+    
+    if (postIndex !== -1) {
+        posts.splice(postIndex, 1);
+        savePosts();
+        return true;
+    }
+    
+    return false;
+}
+
+/**
+ * Get a post by ID
+ * @param {string} id - Post ID
+ * @returns {Object|null} Post object or null
+ */
+function getPostById(id) {
+    return posts.find(post => post.id === id) || null;
+}
+
