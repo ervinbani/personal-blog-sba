@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing - Personal Blog Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #3b82f6; }
+        .test { 
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .pass { border-left-color: #10b981; }
+        .fail { border-left-color: #ef4444; }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Personal Blog Platform - Test Cases</h1>
+    
+    <div class="test pass">
+        <h3>✅ Test 1: Create New Post</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Fill in title: "My First Blog Post"</li>
+            <li>Fill in content: "This is my first post on this amazing platform!"</li>
+            <li>Click "Publish Post"</li>
+        </ol>
+        <p><strong>Expected:</strong> Post appears in posts grid with title, content, and timestamp</p>
+    </div>
+
+    <div class="test pass">
+        <h3>✅ Test 2: Form Validation - Empty Fields</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Leave title and content empty</li>
+            <li>Click "Publish Post"</li>
+        </ol>
+        <p><strong>Expected:</strong> Error messages "Title is required" and "Content is required" appear</p>
+    </div>
+
+    <div class="test pass">
+        <h3>✅ Test 3: Form Validation - Short Content</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Enter title: "Test"</li>
+            <li>Enter content: "Hi" (less than 10 characters)</li>
+            <li>Click "Publish Post"</li>
+        </ol>
+        <p><strong>Expected:</strong> Error message "Content must be at least 10 characters"</p>
+    </div>
+
+    <div class="test pass">
+        <h3>✅ Test 4: Edit Post</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Click "Edit" button on any post</li>
+            <li>Modal opens with current post data</li>
+            <li>Modify title and/or content</li>
+            <li>Click "Update Post"</li>
+        </ol>
+        <p><strong>Expected:</strong> Modal closes, post updates with new content and new timestamp</p>
+    </div>
+
+    <div class="test pass">
+        <h3>✅ Test 5: Delete Post</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Click "Delete" button on any post</li>
+            <li>Confirm deletion in dialog</li>
+        </ol>
+        <p><strong>Expected:</strong> Post is removed from display and localStorage</p>
+    </div>
+
+    <div class="test pass">
+        <h3>✅ Test 6: localStorage Persistence</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Create several posts</li>
+            <li>Refresh the page (F5)</li>
+        </ol>
+        <p><strong>Expected:</strong> All posts persist and display correctly after refresh</p>
+    </div>
+
+    <div class="test pass">
+        <h3>✅ Test 7: Modal Close Methods</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Open edit modal</li>
+            <li>Test closing via: X button, Cancel button, ESC key, clicking overlay</li>
+        </ol>
+        <p><strong>Expected:</strong> All methods successfully close modal</p>
+    </div>
+
+    <div class="test pass">
+        <h3>✅ Test 8: Responsive Design</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Resize browser to mobile size (< 640px)</li>
+            <li>Resize to tablet size (640px - 1024px)</li>
+            <li>Check desktop size (> 1024px)</li>
+        </ol>
+        <p><strong>Expected:</strong> Layout adapts appropriately for each screen size</p>
+    </div>
+
+    <div class="test pass">
+        <h3>✅ Test 9: Post Count</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Create posts and observe counter</li>
+            <li>Delete posts and observe counter</li>
+        </ol>
+        <p><strong>Expected:</strong> Count updates correctly with proper pluralization</p>
+    </div>
+
+    <div class="test pass">
+        <h3>✅ Test 10: Empty State</h3>
+        <p><strong>Steps:</strong></p>
+        <ol>
+            <li>Delete all posts</li>
+        </ol>
+        <p><strong>Expected:</strong> Empty state message appears: "📭 No posts yet..."</p>
+    </div>
+
+    <h2>✅ All Tests Passing!</h2>
+    <p><a href="index.html">← Back to Blog</a></p>
+</body>
+</html>
