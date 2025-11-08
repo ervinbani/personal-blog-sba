@@ -246,19 +246,27 @@ textarea {
 
 // Sections
 .new-post-section {
-  background-color: $surface-color;
-  padding: $spacing-xl;
-  border-radius: $radius-lg;
-  box-shadow: $shadow-md;
-  margin-bottom: $spacing-2xl;
+    background-color: $surface-color;
+    padding: $spacing-xl;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-md;
+    margin-bottom: $spacing-2xl;
+    transition: all $transition-slow;
+    overflow: hidden;
 
-  h2 {
-    margin-bottom: $spacing-lg;
-    color: $text-primary;
-  }
-}
-
-.posts-section {
+    h2 {
+        margin-bottom: $spacing-lg;
+        color: $text-primary;
+    }
+    
+    &.collapsed {
+        max-height: 0;
+        padding: 0;
+        margin-bottom: 0;
+        opacity: 0;
+        box-shadow: none;
+    }
+}.posts-section {
   h2 {
     margin-bottom: $spacing-xl;
     color: $text-primary;
@@ -266,21 +274,36 @@ textarea {
 }
 
 .posts-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: $spacing-xl;
-  flex-wrap: wrap;
-  gap: $spacing-md;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-xl;
+    flex-wrap: wrap;
+    gap: $spacing-md;
 }
 
 .posts-count {
-  font-size: $font-size-lg;
-  color: $text-secondary;
-  font-weight: $font-weight-medium;
+    font-size: $font-size-lg;
+    color: $text-secondary;
+    font-weight: $font-weight-medium;
 }
 
-// Empty State
+.btn-add-post {
+    background-color: $primary-color;
+    color: $surface-color;
+    padding: $spacing-md $spacing-xl;
+    
+    &:hover:not(:disabled) {
+        background-color: $primary-dark;
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+    }
+    
+    &::before {
+        content: "+ ";
+        font-size: 1.2em;
+    }
+}// Empty State
 .empty-state {
   text-align: center;
   padding: $spacing-3xl $spacing-xl;

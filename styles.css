@@ -146,10 +146,19 @@ textarea {
   border-radius: 0.75rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   margin-bottom: 3rem;
+  transition: all 300ms ease-in-out;
+  overflow: hidden;
 }
 .new-post-section h2 {
   margin-bottom: 1.5rem;
   color: #111827;
+}
+.new-post-section.collapsed {
+  max-height: 0;
+  padding: 0;
+  margin-bottom: 0;
+  opacity: 0;
+  box-shadow: none;
 }
 
 .posts-section h2 {
@@ -170,6 +179,21 @@ textarea {
   font-size: 1.125rem;
   color: #6b7280;
   font-weight: 500;
+}
+
+.btn-add-post {
+  background-color: #3b82f6;
+  color: #ffffff;
+  padding: 1rem 2rem;
+}
+.btn-add-post:hover:not(:disabled) {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.btn-add-post::before {
+  content: "+ ";
+  font-size: 1.2em;
 }
 
 .empty-state {

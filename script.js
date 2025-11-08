@@ -160,6 +160,8 @@ const postTitleInput = document.getElementById("postTitle");
 const postContentInput = document.getElementById("postContent");
 const titleError = document.getElementById("titleError");
 const contentError = document.getElementById("contentError");
+const newPostSection = document.querySelector(".new-post-section");
+const btnAddPost = document.getElementById("btnAddPost");
 
 // Posts display
 const postsContainer = document.getElementById("postsContainer");
@@ -323,6 +325,38 @@ function updatePostsCount() {
 }
 
 // ============================================
+// FORM TOGGLE FUNCTIONS
+// ============================================
+
+/**
+ * Toggle new post form visibility
+ */
+function toggleNewPostForm() {
+    const isCollapsed = newPostSection.classList.contains('collapsed');
+    
+    if (isCollapsed) {
+        // Show form
+        newPostSection.classList.remove('collapsed');
+        btnAddPost.textContent = 'Hide Form';
+        // Focus on title input after animation
+        setTimeout(() => {
+            postTitleInput.focus();
+        }, 300);
+    } else {
+        // Hide form
+        newPostSection.classList.add('collapsed');
+        btnAddPost.textContent = 'New Post';
+        // Clear form
+        postForm.reset();
+        // Clear errors
+        titleError.textContent = '';
+        contentError.textContent = '';
+        postTitleInput.classList.remove('error');
+        postContentInput.classList.remove('error');
+    }
+}
+
+// ============================================
 // DETAIL VIEW FUNCTIONS
 // ============================================
 
@@ -475,6 +509,10 @@ function handleNewPost(e) {
 
   // Clear form
   postForm.reset();
+  
+  // Hide form after submission
+  newPostSection.classList.add('collapsed');
+  btnAddPost.textContent = 'New Post';
 
   // Re-render posts
   renderPosts();
@@ -606,6 +644,7 @@ function init() {
   editForm.addEventListener("submit", handleEditPost);
   postsContainer.addEventListener("click", handlePostAction);
   postDetail.addEventListener("click", handlePostAction);
+  btnAddPost.addEventListener("click", toggleNewPostForm);
   closeModalBtn.addEventListener("click", closeEditModal);
   cancelEditBtn.addEventListener("click", closeEditModal);
   editModal.addEventListener("click", handleModalOverlayClick);
