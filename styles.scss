@@ -460,10 +460,57 @@ textarea {
   }
 }
 
+// Post Footer with Rating
+.post-footer {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-top: auto;
+}
+
+.post-rating-display {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm;
+  background-color: $bg-color;
+  border-radius: $radius-md;
+  align-self: flex-start;
+}
+
+.stars-display {
+  display: flex;
+  gap: 2px;
+  
+  .star {
+    font-size: 1.2rem;
+    line-height: 1;
+    
+    &.filled {
+      color: #fbbf24; // Amber/gold color
+    }
+    
+    &.half {
+      color: #fbbf24;
+      opacity: 0.5;
+    }
+    
+    &.empty {
+      color: $text-secondary;
+      opacity: 0.3;
+    }
+  }
+}
+
+.rating-info {
+  font-size: $font-size-sm;
+  color: $text-secondary;
+  font-weight: $font-weight-medium;
+}
+
 .post-actions {
   display: flex;
   gap: $spacing-md;
-  margin-top: auto;
   flex-wrap: wrap;
 }
 
@@ -481,6 +528,23 @@ textarea {
 
   &::before {
     content: "📖 ";
+  }
+}
+
+.btn-rate {
+  background-color: transparent;
+  color: #fbbf24;
+  border-color: #fbbf24;
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-sm;
+
+  &:hover:not(:disabled) {
+    background-color: #fbbf24;
+    color: $surface-color;
+  }
+
+  &::before {
+    content: "⭐ ";
   }
 }
 
@@ -656,6 +720,50 @@ textarea {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+// Rating Modal Specific Styles
+.rating-modal-content {
+  max-width: 400px;
+}
+
+.rating-modal-body {
+  padding: $spacing-2xl $spacing-xl;
+  text-align: center;
+}
+
+.rating-instruction {
+  margin-bottom: $spacing-xl;
+  font-size: $font-size-lg;
+  color: $text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+}
+
+.rating-star {
+  background: none;
+  border: none;
+  font-size: 3rem;
+  color: $text-secondary;
+  cursor: pointer;
+  transition: all $transition-fast;
+  padding: $spacing-sm;
+  border-radius: $radius-md;
+  
+  &:hover {
+    color: #fbbf24;
+    transform: scale(1.2);
+  }
+  
+  &:active {
+    transform: scale(1.1);
   }
 }
 

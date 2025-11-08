@@ -88,6 +88,7 @@ function addPost(title, content) {
     title: title.trim(),
     content: content.trim(),
     timestamp: Date.now(),
+    ratings: [], // Array to store individual ratings (1-5)
   };
 
   posts.unshift(post); // Add to beginning of array
@@ -165,6 +166,86 @@ const editTitleError = document.getElementById("editTitleError");
 const editContentError = document.getElementById("editContentError");
 const closeModalBtn = document.getElementById("closeModal");
 const cancelEditBtn = document.getElementById("cancelEdit");
+
+// Rating modal elements
+const ratingModal = document.getElementById("ratingModal");
+const ratingStars = document.getElementById("ratingStars");
+const closeRatingBtn = document.getElementById("closeRating");
+const cancelRatingBtn = document.getElementById("cancelRating");
+let currentRatingPostId = null;
+
+// ============================================
+// RATING FUNCTIONS
+// ============================================
+
+/**
+ * Add a rating to a post
+ * @param {string} postId - Post ID
+ * @param {number} rating - Rating value (1-5)
+ * @returns {boolean} Success status
+ */
+function addRating(postId, rating) {
+  const postIndex = posts.findIndex((post) => post.id === postId);
+
+  if (postIndex !== -1) {
+    // Initialize ratings array if it doesn't exist
+    if (!posts[postIndex].ratings) {
+      posts[postIndex].ratings = [];
+    }
+
+    posts[postIndex].ratings.push(rating);
+    savePosts();
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Calculate average rating for a post
+ * @param {Object} post - Post object
+ * @returns {number} Average rating (0 if no ratings)
+ */
+function getAverageRating(post) {
+  if (!post.ratings || post.ratings.length === 0) {
+    return 0;
+  }
+
+  const sum = post.ratings.reduce((acc, rating) => acc + rating, 0);
+  return (sum / post.ratings.length).toFixed(1);
+}
+
+/**
+ * Get rating count for a post
+ * @param {Object} post - Post object
+ * @returns {number} Number of ratings
+ */
+function getRatingCount(post) {
+  return post.ratings ? post.ratings.length : 0;
+}
+
+/**
+ * Generate star HTML for display
+ * @param {number} rating - Average rating
+ * @returns {string} HTML string with stars
+ */
+function generateStarDisplay(rating) {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  let html = "";
+
+  for (let i = 0; i < 5; i++) {
+    if (i < fullStars) {
+      html += '<span class="star filled">★</span>';
+    } else if (i === fullStars && hasHalfStar) {
+      html += '<span class="star half">★</span>';
+    } else {
+      html += '<span class="star empty">☆</span>';
+    }
+  }
+
+  return html;
+}
 
 // ============================================
 // VALIDATION FUNCTIONS
@@ -279,32 +360,44 @@ function createPostCard(post) {
     ? "post-content truncated"
     : "post-content";
 
+  const avgRating = getAverageRating(post);
+  const ratingCount = getRatingCount(post);
+
   card.innerHTML = `
         <div class="post-header">
             <h3 class="post-title">${sanitizeHTML(post.title)}</h3>
             <div class="post-timestamp">${formatDate(post.timestamp)}</div>
         </div>
         <div class="${contentClass}">${sanitizeHTML(post.content)}</div>
-        <div class="post-actions">
-            ${
-              isLongContent
-                ? `
-                <button class="btn btn-read-more btn-icon" data-action="view" data-id="${post.id}">
-                    Leggi tutto
+        <div class="post-footer">
+            <div class="post-rating-display">
+                <div class="stars-display">${generateStarDisplay(avgRating)}</div>
+                <span class="rating-info">${avgRating > 0 ? avgRating : 'No ratings'} ${ratingCount > 0 ? `(${ratingCount} ${ratingCount === 1 ? 'rating' : 'ratings'})` : ''}</span>
+            </div>
+            <div class="post-actions">
+                <button class="btn btn-rate btn-icon" data-action="rate" data-id="${post.id}">
+                    Rate
                 </button>
-            `
-                : ""
-            }
-            <button class="btn btn-edit btn-icon" data-action="edit" data-id="${
-              post.id
-            }">
-                Edit
-            </button>
-            <button class="btn btn-delete btn-icon" data-action="delete" data-id="${
-              post.id
-            }">
-                Delete
-            </button>
+                ${
+                  isLongContent
+                    ? `
+                    <button class="btn btn-read-more btn-icon" data-action="view" data-id="${post.id}">
+                        Leggi tutto
+                    </button>
+                `
+                    : ""
+                }
+                <button class="btn btn-edit btn-icon" data-action="edit" data-id="${
+                  post.id
+                }">
+                    Edit
+                </button>
+                <button class="btn btn-delete btn-icon" data-action="delete" data-id="${
+                  post.id
+                }">
+                    Delete
+                </button>
+            </div>
         </div>
     `;
 
@@ -371,6 +464,9 @@ function showPostDetail(postId) {
   currentView = "detail";
   currentDetailPostId = postId;
 
+  const avgRating = getAverageRating(post);
+  const ratingCount = getRatingCount(post);
+
   // Create detail view HTML
   postDetail.innerHTML = `
         <div class="post-detail-header">
@@ -380,11 +476,20 @@ function showPostDetail(postId) {
                   post.timestamp
                 )}</span>
             </div>
+            <div class="post-rating-display">
+                <div class="stars-display">${generateStarDisplay(avgRating)}</div>
+                <span class="rating-info">${avgRating > 0 ? avgRating : 'No ratings'} ${ratingCount > 0 ? `(${ratingCount} ${ratingCount === 1 ? 'rating' : 'ratings'})` : ''}</span>
+            </div>
         </div>
         <div class="post-detail-content">${sanitizeHTML(post.content)}</div>
         <div class="post-detail-actions">
             <button class="btn btn-back" data-action="back">
                 Indietro
+            </button>
+            <button class="btn btn-rate btn-icon" data-action="rate" data-id="${
+              post.id
+            }">
+                Rate
             </button>
             <button class="btn btn-edit btn-icon" data-action="edit" data-id="${
               post.id
@@ -479,6 +584,77 @@ function closeEditModal() {
 }
 
 // ============================================
+// RATING MODAL FUNCTIONS
+// ============================================
+
+/**
+ * Open the rating modal
+ * @param {string} postId - ID of post to rate
+ */
+function openRatingModal(postId) {
+  const post = getPostById(postId);
+
+  if (!post) {
+    alert("Post not found");
+    return;
+  }
+
+  currentRatingPostId = postId;
+
+  // Create star rating buttons
+  ratingStars.innerHTML = "";
+  for (let i = 1; i <= 5; i++) {
+    const star = document.createElement("button");
+    star.className = "rating-star";
+    star.setAttribute("data-rating", i);
+    star.innerHTML = "★";
+    star.title = `Rate ${i} star${i > 1 ? "s" : ""}`;
+    ratingStars.appendChild(star);
+  }
+
+  // Show modal
+  ratingModal.classList.add("active");
+  ratingModal.setAttribute("aria-hidden", "false");
+}
+
+/**
+ * Close the rating modal
+ */
+function closeRatingModal() {
+  ratingModal.classList.remove("active");
+  ratingModal.setAttribute("aria-hidden", "true");
+  currentRatingPostId = null;
+  ratingStars.innerHTML = "";
+}
+
+/**
+ * Handle rating star click
+ * @param {Event} e - Click event
+ */
+function handleRatingClick(e) {
+  const star = e.target.closest(".rating-star");
+
+  if (!star || !currentRatingPostId) return;
+
+  const rating = parseInt(star.getAttribute("data-rating"));
+
+  // Add rating to post
+  const success = addRating(currentRatingPostId, rating);
+
+  if (success) {
+    closeRatingModal();
+    // Re-render to show updated rating
+    if (currentView === "detail") {
+      showPostDetail(currentRatingPostId);
+    } else {
+      renderPosts();
+    }
+  } else {
+    alert("Failed to add rating");
+  }
+}
+
+// ============================================
 // EVENT HANDLERS
 // ============================================
 
@@ -560,7 +736,7 @@ function handleEditPost(e) {
 }
 
 /**
- * Handle post action buttons (edit/delete/view)
+ * Handle post action buttons (edit/delete/view/rate)
  * @param {Event} e - Click event
  */
 function handlePostAction(e) {
@@ -579,6 +755,8 @@ function handlePostAction(e) {
     showPostDetail(postId);
   } else if (action === "back") {
     hidePostDetail();
+  } else if (action === "rate") {
+    openRatingModal(postId);
   }
 }
 
@@ -651,10 +829,25 @@ function init() {
   cancelEditBtn.addEventListener("click", closeEditModal);
   editModal.addEventListener("click", handleModalOverlayClick);
 
-  // Handle ESC key to close modal
+  // Rating modal event listeners
+  closeRatingBtn.addEventListener("click", closeRatingModal);
+  cancelRatingBtn.addEventListener("click", closeRatingModal);
+  ratingStars.addEventListener("click", handleRatingClick);
+  ratingModal.addEventListener("click", (e) => {
+    if (e.target === ratingModal || e.target.classList.contains("modal-overlay")) {
+      closeRatingModal();
+    }
+  });
+
+  // Handle ESC key to close modals
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && editModal.classList.contains("active")) {
-      closeEditModal();
+    if (e.key === "Escape") {
+      if (editModal.classList.contains("active")) {
+        closeEditModal();
+      }
+      if (ratingModal.classList.contains("active")) {
+        closeRatingModal();
+      }
     }
   });
 
