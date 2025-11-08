@@ -145,3 +145,30 @@ function getPostById(id) {
     return posts.find(post => post.id === id) || null;
 }
 
+// ============================================
+// DOM ELEMENT REFERENCES
+// ============================================
+
+// Form elements
+const postForm = document.getElementById('postForm');
+const postTitleInput = document.getElementById('postTitle');
+const postContentInput = document.getElementById('postContent');
+const titleError = document.getElementById('titleError');
+const contentError = document.getElementById('contentError');
+
+// Posts display
+const postsContainer = document.getElementById('postsContainer');
+const postsCount = document.getElementById('postsCount');
+const emptyState = document.getElementById('emptyState');
+
+// Modal elements
+const editModal = document.getElementById('editModal');
+const editForm = document.getElementById('editForm');
+const editPostId = document.getElementById('editPostId');
+const editPostTitleInput = document.getElementById('editPostTitle');
+const editPostContentInput = document.getElementById('editPostContent');
+const editTitleError = document.getElementById('editTitleError');
+const editContentError = document.getElementById('editContentError');
+const closeModalBtn = document.getElementById('closeModal');
+const cancelEditBtn = document.getElementById('cancelEdit');
+
