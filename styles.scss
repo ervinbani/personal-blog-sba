@@ -509,3 +509,181 @@ textarea {
     }
 }
 
+// ============================================
+// BUTTONS
+// ============================================
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-md $spacing-xl;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-base;
+    border: 2px solid transparent;
+    text-decoration: none;
+    white-space: nowrap;
+    
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.btn-primary {
+    background-color: $primary-color;
+    color: $surface-color;
+
+    &:hover:not(:disabled) {
+        background-color: $primary-dark;
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: $text-secondary;
+    border-color: $border-color;
+
+    &:hover:not(:disabled) {
+        background-color: $bg-color;
+        border-color: $secondary-dark;
+        color: $text-primary;
+    }
+}
+
+.btn-edit {
+    background-color: transparent;
+    color: $primary-color;
+    border-color: $primary-color;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+
+    &:hover:not(:disabled) {
+        background-color: $primary-color;
+        color: $surface-color;
+    }
+}
+
+.btn-delete {
+    background-color: transparent;
+    color: $error-color;
+    border-color: $error-color;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+
+    &:hover:not(:disabled) {
+        background-color: $error-color;
+        color: $surface-color;
+    }
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    &::before {
+        font-size: 1.2em;
+    }
+}
+
+// Button icons
+.btn-edit::before {
+    content: "✏️";
+}
+
+.btn-delete::before {
+    content: "🗑️";
+}
+
+// ============================================
+// ERROR MESSAGES
+// ============================================
+
+.error-message {
+    display: block;
+    color: $error-color;
+    font-size: $font-size-sm;
+    margin-top: $spacing-sm;
+    font-weight: $font-weight-medium;
+    min-height: 1.2em;
+    
+    &:empty {
+        display: none;
+    }
+
+    &::before {
+        content: "⚠️ ";
+    }
+}
+
+// ============================================
+// RESPONSIVE DESIGN
+// ============================================
+
+@media (max-width: $breakpoint-md) {
+    .header {
+        padding: $spacing-xl 0;
+
+        h1 {
+            font-size: $font-size-2xl;
+        }
+
+        p {
+            font-size: $font-size-base;
+        }
+    }
+
+    .new-post-section {
+        padding: $spacing-lg;
+    }
+
+    .post-card {
+        padding: $spacing-lg;
+    }
+
+    .modal-content {
+        margin: $spacing-md;
+    }
+
+    .btn {
+        padding: $spacing-sm $spacing-lg;
+        font-size: $font-size-sm;
+    }
+}
+
+@media (max-width: $breakpoint-sm) {
+    .container {
+        padding: 0 $spacing-md;
+    }
+
+    .posts-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .post-actions {
+        flex-direction: column;
+
+        .btn {
+            width: 100%;
+        }
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+
+        .btn {
+            width: 100%;
+        }
+    }
+}
