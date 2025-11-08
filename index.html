@@ -1,145 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interactive Personal Blog Platform - A client-side blog application">
-    <meta name="keywords" content="blog, personal blog, javascript, localStorage">
-    <meta name="author" content="Ervin">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Interactive Personal Blog Platform - A client-side blog application"
+    />
+    <meta
+      name="keywords"
+      content="blog, personal blog, javascript, localStorage"
+    />
+    <meta name="author" content="Ervin" />
     <title>Personal Blog Platform | Create, Edit & Share Your Thoughts</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    
+
     <header class="header" role="banner">
-        <div class="container">
-            <h1>📝 My Personal Blog</h1>
-            <p>Share your thoughts and ideas</p>
-        </div>
+      <div class="container">
+        <h1>📝 My Personal Blog</h1>
+        <p>Share your thoughts and ideas</p>
+      </div>
     </header>
 
     <main class="main-content" id="main-content" role="main">
-        <div class="container">
-            <!-- New Post Form Section -->
-            <section class="new-post-section" aria-labelledby="new-post-heading">
-                <h2 id="new-post-heading">Create New Post</h2>
-                <form id="postForm" class="post-form" novalidate aria-describedby="form-instructions">
-                    <p id="form-instructions" class="sr-only">Fill in the form below to create a new blog post. Both title and content are required.</p>
-                    
-                    <div class="form-group">
-                        <label for="postTitle">Post Title *</label>
-                        <input 
-                            type="text" 
-                            id="postTitle" 
-                            name="postTitle" 
-                            placeholder="Enter your post title..."
-                            aria-required="true"
-                            aria-invalid="false"
-                            aria-describedby="titleError"
-                            required
-                        >
-                        <span class="error-message" id="titleError" role="alert" aria-live="polite"></span>
-                    </div>
+      <div class="container">
+        <!-- New Post Form Section -->
+        <section class="new-post-section" aria-labelledby="new-post-heading">
+          <h2 id="new-post-heading">Create New Post</h2>
+          <form
+            id="postForm"
+            class="post-form"
+            novalidate
+            aria-describedby="form-instructions"
+          >
+            <p id="form-instructions" class="sr-only">
+              Fill in the form below to create a new blog post. Both title and
+              content are required.
+            </p>
 
-                    <div class="form-group">
-                        <label for="postContent">Post Content *</label>
-                        <textarea 
-                            id="postContent" 
-                            name="postContent" 
-                            rows="6"
-                            placeholder="Write your thoughts..."
-                            aria-required="true"
-                            aria-invalid="false"
-                            aria-describedby="contentError"
-                            required
-                        ></textarea>
-                        <span class="error-message" id="contentError" role="alert" aria-live="polite"></span>
-                    </div>
+            <div class="form-group">
+              <label for="postTitle">Post Title *</label>
+              <input
+                type="text"
+                id="postTitle"
+                name="postTitle"
+                placeholder="Enter your post title..."
+                aria-required="true"
+                aria-invalid="false"
+                aria-describedby="titleError"
+                required
+              />
+              <span
+                class="error-message"
+                id="titleError"
+                role="alert"
+                aria-live="polite"
+              ></span>
+            </div>
 
-                    <button type="submit" class="btn btn-primary">
-                        Publish Post
-                    </button>
-                </form>
-            </section>
+            <div class="form-group">
+              <label for="postContent">Post Content *</label>
+              <textarea
+                id="postContent"
+                name="postContent"
+                rows="6"
+                placeholder="Write your thoughts..."
+                aria-required="true"
+                aria-invalid="false"
+                aria-describedby="contentError"
+                required
+              ></textarea>
+              <span
+                class="error-message"
+                id="contentError"
+                role="alert"
+                aria-live="polite"
+              ></span>
+            </div>
 
-            <!-- Posts Display Section -->
-            <section class="posts-section" aria-labelledby="posts-heading">
-                <div class="posts-header">
-                    <h2 id="posts-heading">My Posts</h2>
-                    <span class="posts-count" id="postsCount" aria-live="polite">0 posts</span>
-                </div>
-                <div id="postsContainer" class="posts-grid" role="feed" aria-busy="false">
-                    <!-- Posts will be dynamically inserted here -->
-                </div>
-                <div id="emptyState" class="empty-state" role="status">
-                    <p>📭 No posts yet. Create your first post above!</p>
-                </div>
-            </section>
-        </div>
+            <button type="submit" class="btn btn-primary">Publish Post</button>
+          </form>
+        </section>
+
+        <!-- Posts Display Section -->
+        <section class="posts-section" aria-labelledby="posts-heading">
+          <div class="posts-header">
+            <h2 id="posts-heading">My Posts</h2>
+            <span class="posts-count" id="postsCount" aria-live="polite"
+              >0 posts</span
+            >
+          </div>
+          
+          <!-- Post Detail View (Hidden by default) -->
+          <div id="postDetail" class="post-detail">
+            <!-- Detail content will be inserted here by JavaScript -->
+          </div>
+          
+          <!-- Posts List View -->
+          <div
+            id="postsContainer"
+            class="posts-grid"
+            role="feed"
+            aria-busy="false"
+          >
+            <!-- Posts will be dynamically inserted here -->
+          </div>
+          <div id="emptyState" class="empty-state" role="status">
+            <p>📭 No posts yet. Create your first post above!</p>
+          </div>
+        </section>
+      </div>
     </main>
 
     <footer class="footer" role="contentinfo">
-        <div class="container">
-            <p>&copy; 2025 Personal Blog Platform. Built with vanilla JavaScript.</p>
-        </div>
+      <div class="container">
+        <p>
+          &copy; 2025 Personal Blog Platform. Built with vanilla JavaScript.
+        </p>
+      </div>
     </footer>
 
     <!-- Edit Post Modal -->
-    <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-title">Edit Post</h2>
-                <button type="button" class="close-modal" id="closeModal" aria-label="Close modal">
-                    &times;
-                </button>
-            </div>
-            <form id="editForm" class="edit-form" novalidate>
-                <input type="hidden" id="editPostId">
-                
-                <div class="form-group">
-                    <label for="editPostTitle">Post Title *</label>
-                    <input 
-                        type="text" 
-                        id="editPostTitle" 
-                        name="editPostTitle" 
-                        placeholder="Enter your post title..."
-                        aria-required="true"
-                        aria-invalid="false"
-                        aria-describedby="editTitleError"
-                        required
-                    >
-                    <span class="error-message" id="editTitleError" role="alert" aria-live="polite"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="editPostContent">Post Content *</label>
-                    <textarea 
-                        id="editPostContent" 
-                        name="editPostContent" 
-                        rows="8"
-                        placeholder="Write your thoughts..."
-                        aria-required="true"
-                        aria-invalid="false"
-                        aria-describedby="editContentError"
-                        required
-                    ></textarea>
-                    <span class="error-message" id="editContentError" role="alert" aria-live="polite"></span>
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelEdit">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        Update Post
-                    </button>
-                </div>
-            </form>
+    <div
+      id="editModal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      aria-hidden="true"
+    >
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title">Edit Post</h2>
+          <button
+            type="button"
+            class="close-modal"
+            id="closeModal"
+            aria-label="Close modal"
+          >
+            &times;
+          </button>
         </div>
+        <form id="editForm" class="edit-form" novalidate>
+          <input type="hidden" id="editPostId" />
+
+          <div class="form-group">
+            <label for="editPostTitle">Post Title *</label>
+            <input
+              type="text"
+              id="editPostTitle"
+              name="editPostTitle"
+              placeholder="Enter your post title..."
+              aria-required="true"
+              aria-invalid="false"
+              aria-describedby="editTitleError"
+              required
+            />
+            <span
+              class="error-message"
+              id="editTitleError"
+              role="alert"
+              aria-live="polite"
+            ></span>
+          </div>
+
+          <div class="form-group">
+            <label for="editPostContent">Post Content *</label>
+            <textarea
+              id="editPostContent"
+              name="editPostContent"
+              rows="8"
+              placeholder="Write your thoughts..."
+              aria-required="true"
+              aria-invalid="false"
+              aria-describedby="editContentError"
+              required
+            ></textarea>
+            <span
+              class="error-message"
+              id="editContentError"
+              role="alert"
+              aria-live="polite"
+            ></span>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="cancelEdit">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">Update Post</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

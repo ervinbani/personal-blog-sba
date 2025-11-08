@@ -8,9 +8,11 @@
 // GLOBAL STATE & CONSTANTS
 // ============================================
 
-const STORAGE_KEY = 'personalBlogPosts'; // localStorage key for posts data
+const STORAGE_KEY = "personalBlogPosts"; // localStorage key for posts data
 let posts = []; // Array to store all blog posts
 let currentEditId = null; // Track which post is being edited
+let currentView = 'list'; // Track current view: 'list' or 'detail'
+let currentDetailPostId = null; // Track which post is in detail view
 
 // ============================================
 // UTILITY FUNCTIONS
@@ -163,6 +165,7 @@ const contentError = document.getElementById("contentError");
 const postsContainer = document.getElementById("postsContainer");
 const postsCount = document.getElementById("postsCount");
 const emptyState = document.getElementById("emptyState");
+const postDetail = document.getElementById("postDetail");
 
 // Modal elements
 const editModal = document.getElementById("editModal");
@@ -281,22 +284,27 @@ function createPostCard(post) {
   const card = document.createElement("article");
   card.className = "post-card";
   card.setAttribute("data-post-id", post.id);
+  
+  // Check if content is long (more than 200 characters)
+  const isLongContent = post.content.length > 200;
+  const contentClass = isLongContent ? "post-content truncated" : "post-content";
 
   card.innerHTML = `
         <div class="post-header">
             <h3 class="post-title">${sanitizeHTML(post.title)}</h3>
             <div class="post-timestamp">${formatDate(post.timestamp)}</div>
         </div>
-        <div class="post-content">${sanitizeHTML(post.content)}</div>
+        <div class="${contentClass}">${sanitizeHTML(post.content)}</div>
         <div class="post-actions">
-            <button class="btn btn-edit btn-icon" data-action="edit" data-id="${
-              post.id
-            }">
+            ${isLongContent ? `
+                <button class="btn btn-read-more btn-icon" data-action="view" data-id="${post.id}">
+                    Leggi tutto
+                </button>
+            ` : ''}
+            <button class="btn btn-edit btn-icon" data-action="edit" data-id="${post.id}">
                 Edit
             </button>
-            <button class="btn btn-delete btn-icon" data-action="delete" data-id="${
-              post.id
-            }">
+            <button class="btn btn-delete btn-icon" data-action="delete" data-id="${post.id}">
                 Delete
             </button>
         </div>
@@ -315,6 +323,76 @@ function updatePostsCount() {
 }
 
 // ============================================
+// DETAIL VIEW FUNCTIONS
+// ============================================
+
+/**
+ * Show post detail view
+ * @param {string} postId - ID of post to view
+ */
+function showPostDetail(postId) {
+    const post = getPostById(postId);
+    
+    if (!post) {
+        alert('Post not found');
+        return;
+    }
+    
+    currentView = 'detail';
+    currentDetailPostId = postId;
+    
+    // Create detail view HTML
+    postDetail.innerHTML = `
+        <div class="post-detail-header">
+            <h2 class="post-detail-title">${sanitizeHTML(post.title)}</h2>
+            <div class="post-detail-meta">
+                <span class="post-timestamp">${formatDate(post.timestamp)}</span>
+            </div>
+        </div>
+        <div class="post-detail-content">${sanitizeHTML(post.content)}</div>
+        <div class="post-detail-actions">
+            <button class="btn btn-back" data-action="back">
+                Indietro
+            </button>
+            <button class="btn btn-edit btn-icon" data-action="edit" data-id="${post.id}">
+                Edit
+            </button>
+            <button class="btn btn-delete btn-icon" data-action="delete" data-id="${post.id}">
+                Delete
+            </button>
+        </div>
+    `;
+    
+    // Show detail, hide list
+    postDetail.classList.add('active');
+    postsContainer.style.display = 'none';
+    emptyState.style.display = 'none';
+    
+    // Scroll to top
+    postDetail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/**
+ * Hide post detail view and show list
+ */
+function hidePostDetail() {
+    currentView = 'list';
+    currentDetailPostId = null;
+    
+    // Hide detail, show list
+    postDetail.classList.remove('active');
+    postsContainer.style.display = 'flex';
+    
+    // Show empty state if no posts
+    if (posts.length === 0) {
+        emptyState.style.display = 'block';
+    }
+    
+    // Scroll to posts section
+    postsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ============================================
 // MODAL FUNCTIONS
 // ============================================
 
@@ -323,45 +401,45 @@ function updatePostsCount() {
  * @param {string} postId - ID of post to edit
  */
 function openEditModal(postId) {
-    const post = getPostById(postId);
-    
-    if (!post) {
-        alert('Post not found');
-        return;
-    }
-    
-    // Populate modal with post data
-    currentEditId = postId;
-    editPostId.value = postId;
-    editPostTitleInput.value = post.title;
-    editPostContentInput.value = post.content;
-    
-    // Clear any previous errors
-    editTitleError.textContent = '';
-    editContentError.textContent = '';
-    editPostTitleInput.classList.remove('error');
-    editPostContentInput.classList.remove('error');
-    
-    // Show modal
-    editModal.classList.add('active');
-    editModal.setAttribute('aria-hidden', 'false');
-    editPostTitleInput.focus();
+  const post = getPostById(postId);
+
+  if (!post) {
+    alert("Post not found");
+    return;
+  }
+
+  // Populate modal with post data
+  currentEditId = postId;
+  editPostId.value = postId;
+  editPostTitleInput.value = post.title;
+  editPostContentInput.value = post.content;
+
+  // Clear any previous errors
+  editTitleError.textContent = "";
+  editContentError.textContent = "";
+  editPostTitleInput.classList.remove("error");
+  editPostContentInput.classList.remove("error");
+
+  // Show modal
+  editModal.classList.add("active");
+  editModal.setAttribute("aria-hidden", "false");
+  editPostTitleInput.focus();
 }
 
 /**
  * Close the edit modal
  */
 function closeEditModal() {
-    editModal.classList.remove('active');
-    editModal.setAttribute('aria-hidden', 'true');
-    currentEditId = null;
-    editForm.reset();
-    
-    // Clear errors
-    editTitleError.textContent = '';
-    editContentError.textContent = '';
-    editPostTitleInput.classList.remove('error');
-    editPostContentInput.classList.remove('error');
+  editModal.classList.remove("active");
+  editModal.setAttribute("aria-hidden", "true");
+  currentEditId = null;
+  editForm.reset();
+
+  // Clear errors
+  editTitleError.textContent = "";
+  editContentError.textContent = "";
+  editPostTitleInput.classList.remove("error");
+  editPostContentInput.classList.remove("error");
 }
 
 // ============================================
@@ -373,36 +451,36 @@ function closeEditModal() {
  * @param {Event} e - Submit event
  */
 function handleNewPost(e) {
-    e.preventDefault();
-    
-    const title = postTitleInput.value;
-    const content = postContentInput.value;
-    
-    // Validate inputs
-    const isValid = validatePost(
-        title,
-        content,
-        titleError,
-        contentError,
-        postTitleInput,
-        postContentInput
-    );
-    
-    if (!isValid) {
-        return;
-    }
-    
-    // Add post
-    addPost(title, content);
-    
-    // Clear form
-    postForm.reset();
-    
-    // Re-render posts
-    renderPosts();
-    
-    // Scroll to posts section
-    postsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  e.preventDefault();
+
+  const title = postTitleInput.value;
+  const content = postContentInput.value;
+
+  // Validate inputs
+  const isValid = validatePost(
+    title,
+    content,
+    titleError,
+    contentError,
+    postTitleInput,
+    postContentInput
+  );
+
+  if (!isValid) {
+    return;
+  }
+
+  // Add post
+  addPost(title, content);
+
+  // Clear form
+  postForm.reset();
+
+  // Re-render posts
+  renderPosts();
+
+  // Scroll to posts section
+  postsContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 /**
@@ -410,54 +488,58 @@ function handleNewPost(e) {
  * @param {Event} e - Submit event
  */
 function handleEditPost(e) {
-    e.preventDefault();
-    
-    const title = editPostTitleInput.value;
-    const content = editPostContentInput.value;
-    const postId = currentEditId;
-    
-    // Validate inputs
-    const isValid = validatePost(
-        title,
-        content,
-        editTitleError,
-        editContentError,
-        editPostTitleInput,
-        editPostContentInput
-    );
-    
-    if (!isValid) {
-        return;
-    }
-    
-    // Update post
-    const success = updatePost(postId, title, content);
-    
-    if (success) {
-        closeEditModal();
-        renderPosts();
-    } else {
-        alert('Failed to update post');
-    }
+  e.preventDefault();
+
+  const title = editPostTitleInput.value;
+  const content = editPostContentInput.value;
+  const postId = currentEditId;
+
+  // Validate inputs
+  const isValid = validatePost(
+    title,
+    content,
+    editTitleError,
+    editContentError,
+    editPostTitleInput,
+    editPostContentInput
+  );
+
+  if (!isValid) {
+    return;
+  }
+
+  // Update post
+  const success = updatePost(postId, title, content);
+
+  if (success) {
+    closeEditModal();
+    renderPosts();
+  } else {
+    alert("Failed to update post");
+  }
 }
 
 /**
- * Handle post action buttons (edit/delete)
+ * Handle post action buttons (edit/delete/view)
  * @param {Event} e - Click event
  */
 function handlePostAction(e) {
-    const button = e.target.closest('[data-action]');
-    
-    if (!button) return;
-    
-    const action = button.getAttribute('data-action');
-    const postId = button.getAttribute('data-id');
-    
-    if (action === 'edit') {
-        openEditModal(postId);
-    } else if (action === 'delete') {
-        handleDeletePost(postId);
-    }
+  const button = e.target.closest("[data-action]");
+
+  if (!button) return;
+
+  const action = button.getAttribute("data-action");
+  const postId = button.getAttribute("data-id");
+
+  if (action === "edit") {
+    openEditModal(postId);
+  } else if (action === "delete") {
+    handleDeletePost(postId);
+  } else if (action === "view") {
+    showPostDetail(postId);
+  } else if (action === "back") {
+    hidePostDetail();
+  }
 }
 
 /**
@@ -465,30 +547,34 @@ function handlePostAction(e) {
  * @param {string} postId - ID of post to delete
  */
 function handleDeletePost(postId) {
-    const post = getPostById(postId);
-    
-    if (!post) {
-        alert('Post not found');
-        return;
+  const post = getPostById(postId);
+
+  if (!post) {
+    alert("Post not found");
+    return;
+  }
+
+  // Confirm deletion
+  const confirmDelete = confirm(
+    `Are you sure you want to delete "${post.title}"?\n\nThis action cannot be undone.`
+  );
+
+  if (!confirmDelete) {
+    return;
+  }
+
+  // Delete post
+  const success = deletePost(postId);
+
+  if (success) {
+    // If we're in detail view of this post, go back to list
+    if (currentView === 'detail' && currentDetailPostId === postId) {
+      hidePostDetail();
     }
-    
-    // Confirm deletion
-    const confirmDelete = confirm(
-        `Are you sure you want to delete "${post.title}"?\n\nThis action cannot be undone.`
-    );
-    
-    if (!confirmDelete) {
-        return;
-    }
-    
-    // Delete post
-    const success = deletePost(postId);
-    
-    if (success) {
-        renderPosts();
-    } else {
-        alert('Failed to delete post');
-    }
+    renderPosts();
+  } else {
+    alert("Failed to delete post");
+  }
 }
 
 /**
@@ -496,9 +582,9 @@ function handleDeletePost(postId) {
  * @param {Event} e - Click event
  */
 function handleModalOverlayClick(e) {
-    if (e.target === editModal || e.target.classList.contains('modal-overlay')) {
-        closeEditModal();
-    }
+  if (e.target === editModal || e.target.classList.contains("modal-overlay")) {
+    closeEditModal();
+  }
 }
 
 // ============================================
@@ -509,35 +595,35 @@ function handleModalOverlayClick(e) {
  * Initialize the application
  */
 function init() {
-    // Load posts from localStorage
-    posts = loadPosts();
-    
-    // Render initial posts
-    renderPosts();
-    
-    // Add event listeners
-    postForm.addEventListener('submit', handleNewPost);
-    editForm.addEventListener('submit', handleEditPost);
-    postsContainer.addEventListener('click', handlePostAction);
-    closeModalBtn.addEventListener('click', closeEditModal);
-    cancelEditBtn.addEventListener('click', closeEditModal);
-    editModal.addEventListener('click', handleModalOverlayClick);
-    
-    // Handle ESC key to close modal
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && editModal.classList.contains('active')) {
-            closeEditModal();
-        }
-    });
-    
-    console.log('Personal Blog Platform initialized successfully!');
-    console.log(`Loaded ${posts.length} post(s) from localStorage`);
+  // Load posts from localStorage
+  posts = loadPosts();
+
+  // Render initial posts
+  renderPosts();
+
+  // Add event listeners
+  postForm.addEventListener("submit", handleNewPost);
+  editForm.addEventListener("submit", handleEditPost);
+  postsContainer.addEventListener("click", handlePostAction);
+  postDetail.addEventListener("click", handlePostAction);
+  closeModalBtn.addEventListener("click", closeEditModal);
+  cancelEditBtn.addEventListener("click", closeEditModal);
+  editModal.addEventListener("click", handleModalOverlayClick);
+
+  // Handle ESC key to close modal
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && editModal.classList.contains("active")) {
+      closeEditModal();
+    }
+  });
+
+  console.log("Personal Blog Platform initialized successfully!");
+  console.log(`Loaded ${posts.length} post(s) from localStorage`);
 }
 
 // Start the application when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
 } else {
-    init();
+  init();
 }
-

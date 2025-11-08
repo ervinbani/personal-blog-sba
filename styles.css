@@ -22,7 +22,12 @@ body {
   flex-direction: column;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   line-height: 1.25;
   color: #111827;
@@ -244,15 +249,10 @@ textarea {
 }
 
 .posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   margin-bottom: 2rem;
-}
-@media (max-width: 640px) {
-  .posts-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .post-card {
@@ -264,10 +264,11 @@ textarea {
   display: flex;
   flex-direction: column;
   border: 2px solid transparent;
+  width: 100%;
 }
 .post-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   border-color: #60a5fa;
 }
 
@@ -303,11 +304,96 @@ textarea {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+.post-content.truncated {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
 
 .post-actions {
   display: flex;
   gap: 1rem;
   margin-top: auto;
+  flex-wrap: wrap;
+}
+
+.btn-read-more {
+  background-color: transparent;
+  color: #3b82f6;
+  border-color: #3b82f6;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.875rem;
+}
+.btn-read-more:hover:not(:disabled) {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+.btn-read-more::before {
+  content: "📖 ";
+}
+
+.post-detail {
+  display: none;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  padding: 3rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+.post-detail.active {
+  display: block;
+  animation: slideUp 300ms ease-in-out;
+}
+
+.post-detail-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.post-detail-title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.post-detail-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.post-detail-content {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: #111827;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin-bottom: 3rem;
+}
+
+.post-detail-actions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.btn-back {
+  background-color: #6b7280;
+  color: #ffffff;
+}
+.btn-back:hover:not(:disabled) {
+  background-color: #4b5563;
+}
+.btn-back::before {
+  content: "← ";
 }
 
 .modal {
