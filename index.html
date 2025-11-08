@@ -8,6 +8,71 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header class="header">
+        <div class="container">
+            <h1>📝 My Personal Blog</h1>
+            <p>Share your thoughts and ideas</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- New Post Form Section -->
+            <section class="new-post-section">
+                <h2>Create New Post</h2>
+                <form id="postForm" class="post-form" novalidate>
+                    <div class="form-group">
+                        <label for="postTitle">Post Title *</label>
+                        <input 
+                            type="text" 
+                            id="postTitle" 
+                            name="postTitle" 
+                            placeholder="Enter your post title..."
+                            required
+                        >
+                        <span class="error-message" id="titleError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postContent">Post Content *</label>
+                        <textarea 
+                            id="postContent" 
+                            name="postContent" 
+                            rows="6"
+                            placeholder="Write your thoughts..."
+                            required
+                        ></textarea>
+                        <span class="error-message" id="contentError"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Publish Post
+                    </button>
+                </form>
+            </section>
+
+            <!-- Posts Display Section -->
+            <section class="posts-section">
+                <div class="posts-header">
+                    <h2>My Posts</h2>
+                    <span class="posts-count" id="postsCount">0 posts</span>
+                </div>
+                <div id="postsContainer" class="posts-grid">
+                    <!-- Posts will be dynamically inserted here -->
+                </div>
+                <div id="emptyState" class="empty-state">
+                    <p>📭 No posts yet. Create your first post above!</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Personal Blog Platform. Built with vanilla JavaScript.</p>
+        </div>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
