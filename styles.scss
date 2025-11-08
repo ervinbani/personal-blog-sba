@@ -325,3 +325,75 @@ textarea {
     line-height: $line-height-relaxed;
 }
 
+// ============================================
+// POSTS DISPLAY
+// ============================================
+
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $spacing-xl;
+    margin-bottom: $spacing-xl;
+
+    @media (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.post-card {
+    background-color: $surface-color;
+    border-radius: $radius-lg;
+    padding: $spacing-xl;
+    box-shadow: $shadow-md;
+    transition: all $transition-base;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid transparent;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: $shadow-xl;
+        border-color: $primary-light;
+    }
+}
+
+.post-header {
+    margin-bottom: $spacing-md;
+}
+
+.post-title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin-bottom: $spacing-sm;
+    line-height: $line-height-tight;
+    word-wrap: break-word;
+}
+
+.post-timestamp {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+
+    &::before {
+        content: "🕒";
+    }
+}
+
+.post-content {
+    flex: 1;
+    margin-bottom: $spacing-lg;
+    color: $text-primary;
+    line-height: $line-height-relaxed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.post-actions {
+    display: flex;
+    gap: $spacing-md;
+    margin-top: auto;
+}
+
