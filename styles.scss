@@ -261,3 +261,67 @@ textarea {
     display: none;
 }
 
+// ============================================
+// FORMS
+// ============================================
+
+.post-form,
+.edit-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: $spacing-lg;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+label {
+    display: block;
+    margin-bottom: $spacing-sm;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+    font-size: $font-size-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: $spacing-md;
+    border: 2px solid $border-color;
+    border-radius: $radius-md;
+    font-size: $font-size-base;
+    color: $text-primary;
+    background-color: $surface-color;
+    transition: all $transition-base;
+
+    &:focus {
+        outline: none;
+        border-color: $border-focus;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+
+    &::placeholder {
+        color: $text-secondary;
+        opacity: 0.6;
+    }
+
+    &.error {
+        border-color: $error-color;
+
+        &:focus {
+            box-shadow: 0 0 0 3px rgba($error-color, 0.1);
+        }
+    }
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: $line-height-relaxed;
+}
+
