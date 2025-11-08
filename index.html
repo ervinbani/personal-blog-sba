@@ -73,6 +73,55 @@
         </div>
     </footer>
 
+    <!-- Edit Post Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Post</h2>
+                <button type="button" class="close-modal" id="closeModal" aria-label="Close modal">
+                    &times;
+                </button>
+            </div>
+            <form id="editForm" class="edit-form" novalidate>
+                <input type="hidden" id="editPostId">
+                
+                <div class="form-group">
+                    <label for="editPostTitle">Post Title *</label>
+                    <input 
+                        type="text" 
+                        id="editPostTitle" 
+                        name="editPostTitle" 
+                        placeholder="Enter your post title..."
+                        required
+                    >
+                    <span class="error-message" id="editTitleError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="editPostContent">Post Content *</label>
+                    <textarea 
+                        id="editPostContent" 
+                        name="editPostContent" 
+                        rows="8"
+                        placeholder="Write your thoughts..."
+                        required
+                    ></textarea>
+                    <span class="error-message" id="editContentError"></span>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelEdit">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Update Post
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
