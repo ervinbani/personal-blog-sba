@@ -172,3 +172,120 @@ const editContentError = document.getElementById('editContentError');
 const closeModalBtn = document.getElementById('closeModal');
 const cancelEditBtn = document.getElementById('cancelEdit');
 
+// ============================================
+// VALIDATION FUNCTIONS
+// ============================================
+
+/**
+ * Validate form inputs
+ * @param {string} title - Post title
+ * @param {string} content - Post content
+ * @param {HTMLElement} titleErrorEl - Title error element
+ * @param {HTMLElement} contentErrorEl - Content error element
+ * @param {HTMLElement} titleInput - Title input element
+ * @param {HTMLElement} contentInput - Content input element
+ * @returns {boolean} Validation status
+ */
+function validatePost(title, content, titleErrorEl, contentErrorEl, titleInput, contentInput) {
+    let isValid = true;
+    
+    // Clear previous errors
+    titleErrorEl.textContent = '';
+    contentErrorEl.textContent = '';
+    titleInput.classList.remove('error');
+    contentInput.classList.remove('error');
+    
+    // Validate title
+    if (!title.trim()) {
+        titleErrorEl.textContent = 'Title is required';
+        titleInput.classList.add('error');
+        isValid = false;
+    } else if (title.trim().length < 3) {
+        titleErrorEl.textContent = 'Title must be at least 3 characters';
+        titleInput.classList.add('error');
+        isValid = false;
+    } else if (title.trim().length > 100) {
+        titleErrorEl.textContent = 'Title must be less than 100 characters';
+        titleInput.classList.add('error');
+        isValid = false;
+    }
+    
+    // Validate content
+    if (!content.trim()) {
+        contentErrorEl.textContent = 'Content is required';
+        contentInput.classList.add('error');
+        isValid = false;
+    } else if (content.trim().length < 10) {
+        contentErrorEl.textContent = 'Content must be at least 10 characters';
+        contentInput.classList.add('error');
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+// ============================================
+// RENDER FUNCTIONS
+// ============================================
+
+/**
+ * Render all posts to the DOM
+ */
+function renderPosts() {
+    // Clear container
+    postsContainer.innerHTML = '';
+    
+    // Update posts count
+    postsCount.textContent = `${posts.length} ${posts.length === 1 ? 'post' : 'posts'}`;
+    
+    // Show/hide empty state
+    if (posts.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+    } else {
+        emptyState.classList.add('hidden');
+    }
+    
+    // Render each post
+    posts.forEach(post => {
+        const postCard = createPostCard(post);
+        postsContainer.appendChild(postCard);
+    });
+}
+
+/**
+ * Create a post card element
+ * @param {Object} post - Post object
+ * @returns {HTMLElement} Post card element
+ */
+function createPostCard(post) {
+    const card = document.createElement('article');
+    card.className = 'post-card';
+    card.setAttribute('data-post-id', post.id);
+    
+    card.innerHTML = `
+        <div class="post-header">
+            <h3 class="post-title">${sanitizeHTML(post.title)}</h3>
+            <div class="post-timestamp">${formatDate(post.timestamp)}</div>
+        </div>
+        <div class="post-content">${sanitizeHTML(post.content)}</div>
+        <div class="post-actions">
+            <button class="btn btn-edit btn-icon" data-action="edit" data-id="${post.id}">
+                Edit
+            </button>
+            <button class="btn btn-delete btn-icon" data-action="delete" data-id="${post.id}">
+                Delete
+            </button>
+        </div>
+    `;
+    
+    return card;
+}
+
+/**
+ * Update posts count display
+ */
+function updatePostsCount() {
+    postsCount.textContent = `${posts.length} ${posts.length === 1 ? 'post' : 'posts'}`;
+}
+
