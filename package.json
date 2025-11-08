@@ -1,0 +1,25 @@
+{
+  "name": "personal-blog-sba",
+  "version": "1.0.0",
+  "description": "Interactive Personal Blog Platform - A client-side blog application with CRUD operations",
+  "main": "index.html",
+  "scripts": {
+    "sass:watch": "sass --watch styles.scss:styles.css",
+    "sass:build": "sass styles.scss:styles.css",
+    "test": "echo \"Open test.html in browser for manual testing\""
+  },
+  "keywords": [
+    "blog",
+    "javascript",
+    "localStorage",
+    "DOM manipulation",
+    "CRUD",
+    "vanilla-js",
+    "scss"
+  ],
+  "author": "Ervin",
+  "license": "MIT",
+  "devDependencies": {
+    "sass": "^1.93.3"
+  }
+}
