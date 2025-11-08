@@ -429,6 +429,13 @@ textarea {
   word-wrap: break-word;
 }
 
+.post-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+}
+
 .post-timestamp {
   font-size: $font-size-sm;
   color: $text-secondary;
@@ -438,6 +445,22 @@ textarea {
 
   &::before {
     content: "🕒";
+  }
+}
+
+.post-views {
+  font-size: $font-size-sm;
+  color: $text-secondary;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  .view-icon {
+    font-size: $font-size-base;
+  }
+
+  .view-count {
+    font-weight: $font-weight-medium;
   }
 }
 
@@ -481,20 +504,20 @@ textarea {
 .stars-display {
   display: flex;
   gap: 2px;
-  
+
   .star {
     font-size: 1.2rem;
     line-height: 1;
-    
+
     &.filled {
       color: #fbbf24; // Amber/gold color
     }
-    
+
     &.half {
       color: #fbbf24;
       opacity: 0.5;
     }
-    
+
     &.empty {
       color: $text-secondary;
       opacity: 0.3;
@@ -579,8 +602,26 @@ textarea {
   display: flex;
   gap: $spacing-lg;
   flex-wrap: wrap;
+  align-items: center;
   color: $text-secondary;
   font-size: $font-size-sm;
+
+  .post-timestamp,
+  .post-views {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
+
+  .post-views {
+    .view-icon {
+      font-size: $font-size-base;
+    }
+
+    .view-count {
+      font-weight: $font-weight-medium;
+    }
+  }
 }
 
 .post-detail-content {
@@ -756,12 +797,12 @@ textarea {
   transition: all $transition-fast;
   padding: $spacing-sm;
   border-radius: $radius-md;
-  
+
   &:hover {
     color: #fbbf24;
     transform: scale(1.2);
   }
-  
+
   &:active {
     transform: scale(1.1);
   }

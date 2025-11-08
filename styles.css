@@ -309,6 +309,13 @@ textarea {
   word-wrap: break-word;
 }
 
+.post-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
 .post-timestamp {
   font-size: 0.875rem;
   color: #6b7280;
@@ -318,6 +325,20 @@ textarea {
 }
 .post-timestamp::before {
   content: "🕒";
+}
+
+.post-views {
+  font-size: 0.875rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.post-views .view-icon {
+  font-size: 16px;
+}
+.post-views .view-count {
+  font-weight: 500;
 }
 
 .post-content {
@@ -445,8 +466,21 @@ textarea {
   display: flex;
   gap: 1.5rem;
   flex-wrap: wrap;
+  align-items: center;
   color: #6b7280;
   font-size: 0.875rem;
+}
+.post-detail-meta .post-timestamp,
+.post-detail-meta .post-views {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.post-detail-meta .post-views .view-icon {
+  font-size: 16px;
+}
+.post-detail-meta .post-views .view-count {
+  font-weight: 500;
 }
 
 .post-detail-content {

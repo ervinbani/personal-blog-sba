@@ -89,6 +89,7 @@ function addPost(title, content) {
     content: content.trim(),
     timestamp: Date.now(),
     ratings: [], // Array to store individual ratings (1-5)
+    views: 0, // Counter for number of times post detail is opened
   };
 
   posts.unshift(post); // Add to beginning of array
@@ -222,6 +223,24 @@ function getAverageRating(post) {
  */
 function getRatingCount(post) {
   return post.ratings ? post.ratings.length : 0;
+}
+
+/**
+ * Increment view count for a post
+ * @param {string} postId - ID of the post
+ * @returns {boolean} Success status
+ */
+function incrementViews(postId) {
+  const postIndex = posts.findIndex((post) => post.id === postId);
+  if (postIndex !== -1) {
+    if (typeof posts[postIndex].views !== "number") {
+      posts[postIndex].views = 0;
+    }
+    posts[postIndex].views++;
+    savePosts();
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -362,20 +381,39 @@ function createPostCard(post) {
 
   const avgRating = getAverageRating(post);
   const ratingCount = getRatingCount(post);
+  const viewCount = post.views || 0;
 
   card.innerHTML = `
         <div class="post-header">
             <h3 class="post-title">${sanitizeHTML(post.title)}</h3>
-            <div class="post-timestamp">${formatDate(post.timestamp)}</div>
+            <div class="post-meta-row">
+                <div class="post-timestamp">${formatDate(post.timestamp)}</div>
+                <div class="post-views">
+                    <span class="view-icon">👁</span>
+                    <span class="view-count">${viewCount} ${
+    viewCount === 1 ? "view" : "views"
+  }</span>
+                </div>
+            </div>
         </div>
         <div class="${contentClass}">${sanitizeHTML(post.content)}</div>
         <div class="post-footer">
             <div class="post-rating-display">
-                <div class="stars-display">${generateStarDisplay(avgRating)}</div>
-                <span class="rating-info">${avgRating > 0 ? avgRating : 'No ratings'} ${ratingCount > 0 ? `(${ratingCount} ${ratingCount === 1 ? 'rating' : 'ratings'})` : ''}</span>
+                <div class="stars-display">${generateStarDisplay(
+                  avgRating
+                )}</div>
+                <span class="rating-info">${
+                  avgRating > 0 ? avgRating : "No ratings"
+                } ${
+    ratingCount > 0
+      ? `(${ratingCount} ${ratingCount === 1 ? "rating" : "ratings"})`
+      : ""
+  }</span>
             </div>
             <div class="post-actions">
-                <button class="btn btn-rate btn-icon" data-action="rate" data-id="${post.id}">
+                <button class="btn btn-rate btn-icon" data-action="rate" data-id="${
+                  post.id
+                }">
                     Rate
                 </button>
                 ${
@@ -461,11 +499,15 @@ function showPostDetail(postId) {
     return;
   }
 
+  // Increment view count when opening detail
+  incrementViews(postId);
+
   currentView = "detail";
   currentDetailPostId = postId;
 
   const avgRating = getAverageRating(post);
   const ratingCount = getRatingCount(post);
+  const viewCount = post.views || 0;
 
   // Create detail view HTML
   postDetail.innerHTML = `
@@ -475,10 +517,24 @@ function showPostDetail(postId) {
                 <span class="post-timestamp">${formatDate(
                   post.timestamp
                 )}</span>
+                <span class="post-views">
+                    <span class="view-icon">👁</span>
+                    <span class="view-count">${viewCount} ${
+    viewCount === 1 ? "view" : "views"
+  }</span>
+                </span>
             </div>
             <div class="post-rating-display">
-                <div class="stars-display">${generateStarDisplay(avgRating)}</div>
-                <span class="rating-info">${avgRating > 0 ? avgRating : 'No ratings'} ${ratingCount > 0 ? `(${ratingCount} ${ratingCount === 1 ? 'rating' : 'ratings'})` : ''}</span>
+                <div class="stars-display">${generateStarDisplay(
+                  avgRating
+                )}</div>
+                <span class="rating-info">${
+                  avgRating > 0 ? avgRating : "No ratings"
+                } ${
+    ratingCount > 0
+      ? `(${ratingCount} ${ratingCount === 1 ? "rating" : "ratings"})`
+      : ""
+  }</span>
             </div>
         </div>
         <div class="post-detail-content">${sanitizeHTML(post.content)}</div>
@@ -834,7 +890,10 @@ function init() {
   cancelRatingBtn.addEventListener("click", closeRatingModal);
   ratingStars.addEventListener("click", handleRatingClick);
   ratingModal.addEventListener("click", (e) => {
-    if (e.target === ratingModal || e.target.classList.contains("modal-overlay")) {
+    if (
+      e.target === ratingModal ||
+      e.target.classList.contains("modal-overlay")
+    ) {
       closeRatingModal();
     }
   });
