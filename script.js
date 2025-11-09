@@ -420,7 +420,7 @@ function createPostCard(post) {
                   isLongContent
                     ? `
                     <button class="btn btn-read-more btn-icon" data-action="view" data-id="${post.id}">
-                        Leggi tutto
+                    Read More
                     </button>
                 `
                     : ""

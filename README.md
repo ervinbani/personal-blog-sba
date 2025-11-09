@@ -185,18 +185,3 @@ This project successfully demonstrates mastery of:
 - **Clean Code**: Modular, well-documented, maintainable JavaScript
 
 The development process taught me the importance of planning with detailed commits, using SCSS for maintainable styles, and implementing proper error handling for localStorage operations. The modal editing feature proved to be an excellent UX improvement over inline editing.
-
-## 👨‍💻 Author
-
-**Ervin**
-
-- Per Scholas - JavaScript SBA
-- November 8, 2025
-
-## 📄 License
-
-This project is for educational purposes as part of the Per Scholas curriculum.
-
----
-
-**Note**: This project uses no external libraries or frameworks - it's 100% vanilla JavaScript, HTML, and CSS to demonstrate fundamental web development skills.
