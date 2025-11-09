@@ -71,7 +71,20 @@ function savePosts() {
 function loadPosts() {
   try {
     const storedPosts = localStorage.getItem(STORAGE_KEY);
-    return storedPosts ? JSON.parse(storedPosts) : [];
+    const loadedPosts = storedPosts ? JSON.parse(storedPosts) : [];
+    
+    // Migration: Add views field to existing posts that don't have it
+    const migratedPosts = loadedPosts.map(post => {
+      if (typeof post.views !== 'number') {
+        post.views = 0;
+      }
+      if (!Array.isArray(post.ratings)) {
+        post.ratings = [];
+      }
+      return post;
+    });
+    
+    return migratedPosts;
   } catch (error) {
     console.error("Error loading from localStorage:", error);
     return [];
@@ -871,6 +884,9 @@ function handleModalOverlayClick(e) {
 function init() {
   // Load posts from localStorage
   posts = loadPosts();
+  
+  // Save migrated posts back to localStorage
+  savePosts();
 
   // Render initial posts
   renderPosts();
